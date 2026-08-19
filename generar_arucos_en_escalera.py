@@ -94,7 +94,7 @@ if cantidad_ids != cantidad_arucos:
 # CONFIGURACIÓN
 # ============================================================
 
-TAMANO_ARUCO = 200
+TAMANO_ARUCO = 201
 MARGEN = 40
 
 dictionary = cv2.aruco.getPredefinedDictionary(
@@ -204,7 +204,7 @@ for columna in range(columnas):
 # ============================================================
 
 cv2.imwrite(
-    "arucos.png",
+    "output/arucos_escalera.png",
     imagen
 )
 
