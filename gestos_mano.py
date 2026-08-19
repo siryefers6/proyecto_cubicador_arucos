@@ -2,13 +2,18 @@ import functions_landmarks as fnl
 
 class GestosMano:
     def __init__(self, hand_landmarks) -> None:
-        self.hand_landmarks = hand_landmarks
-        # Verificar si hay suficientes landmarks
-        if len(self.hand_landmarks.landmark) < 21:
-            raise ValueError("No se encontraron suficientes puntos de referencia")
 
-        # Asignar todos los puntos de referencia en una lista
-        self.hand_points = [self.hand_landmarks.landmark[i] for i in range(21)]
+        self.hand_landmarks = hand_landmarks
+
+        if len(self.hand_landmarks) < 21:
+            raise ValueError(
+                "No se encontraron suficientes puntos de referencia"
+            )
+
+        self.hand_points = [
+            self.hand_landmarks[i]
+            for i in range(21)
+        ]
 
 
     def get_point(self, indice):
