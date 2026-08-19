@@ -1,6 +1,6 @@
 import cv2
 
-
+camera_number = int(input("Ingrese número de camara a utilizar (0, 1, 2, 3, 4): "))
 # ============================================================
 # CONFIGURACIÓN DE MEDIDAS
 # ============================================================
@@ -93,7 +93,7 @@ detector = cv2.aruco.ArucoDetector(
 # 4. ABRIR CÁMARA
 # ============================================================
 
-camera = cv2.VideoCapture(0)
+camera = cv2.VideoCapture(camera_number)
 
 if not camera.isOpened():
     raise RuntimeError("No se pudo abrir la cámara")
