@@ -34,7 +34,7 @@ DPI = 600
 diccionario_aruco = cv2.aruco.DICT_4X4_1000
 
 # Nombre del archivo de salida
-nombre_archivo = "tests/hoja_arucos.png"
+nombre_archivo = "output/arucos_hoja_carta_milimetrados.png"
 
 
 # ============================================================
