@@ -9,7 +9,7 @@ dict_id_mm = {}
 
 # Distancia entre la esquina 0 de un ArUco
 # y la esquina 0 del siguiente ArUco
-mm_entre_arucos = 12.2
+mm_entre_arucos = 10.5
 
 # Rango de IDs utilizados
 id_inicial = int(input("Digite ID inicial: "))
@@ -19,10 +19,10 @@ id_final = int(input("Digite ID final: "))
 arucos_por_bloque = 20
 
 # Desfase de cada bloque
-desfase_mm = 1.9
+desfase_mm = 2
 
 # Distancia inicial del primer ArUco
-mm_inicial = 23
+mm_inicial = 21.5
 
 
 # ============================================================
