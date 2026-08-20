@@ -12,8 +12,8 @@ dict_id_mm = {}
 mm_entre_arucos = 12.2
 
 # Rango de IDs utilizados
-id_inicial = 0
-id_final = 119
+id_inicial = int(input("Digite ID inicial: "))
+id_final = int(input("Digite ID final: "))
 
 # Cantidad de ArUcos por bloque
 arucos_por_bloque = 20
