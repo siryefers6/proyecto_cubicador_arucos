@@ -1,12 +1,12 @@
 class GrupoArucosLineal():
     def __init__(
         self,
-        id_inicial,
-        id_final,
-        milimetros_pared_a_primer_aruco,
-        tamanio_aruco_milimetros,
-        separacion_arucos_en_milimetros,
-        esquina_referencia_medicion
+        id_inicial: int,
+        id_final: int,
+        milimetros_pared_a_primer_aruco: int,
+        tamanio_aruco_milimetros: int,
+        separacion_arucos_en_milimetros: int,
+        esquina_referencia_medicion: int
         ):
         self.id_inicial = id_inicial
         self.id_final = id_final

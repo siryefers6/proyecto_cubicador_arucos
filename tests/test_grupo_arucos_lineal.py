@@ -1,4 +1,4 @@
-from grupo_arucos_lineal import GrupoArucosLineal
+from classes.grupo_arucos_lineal import GrupoArucosLineal
 
 def test_inicializar_clase_grupo_arucos_lineal():
     """
