@@ -1,5 +1,6 @@
 from classes.grupo_arucos_lineal import GrupoArucosLineal
 
+
 def test_inicializar_clase_grupo_arucos_lineal():
     """
     Probar instancia de clase GrupoArucosLineal
@@ -19,8 +20,8 @@ def test_inicializar_clase_grupo_arucos_lineal():
         milimetros_pared_a_primer_aruco,
         tamanio_aruco_milimetros,
         separacion_arucos_en_milimetros,
-        esquina_referencia_medicion
-        )
+        esquina_referencia_medicion,
+    )
 
     # Assert
     assert grupo_arucos_lineal.id_inicial == 0

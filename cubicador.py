@@ -30,7 +30,6 @@ mm_inicial = 21.5
 # ============================================================
 
 for i in range(id_inicial, id_final + 1):
-
     # Convertir el ID absoluto en un índice relativo
     indice = i - id_inicial
 
@@ -39,16 +38,10 @@ for i in range(id_inicial, id_final + 1):
     posicion = indice % arucos_por_bloque
 
     # Calcular el inicio del bloque
-    mm_inicial_bloque = (
-        mm_inicial
-        + (bloque * desfase_mm)
-    )
+    mm_inicial_bloque = mm_inicial + (bloque * desfase_mm)
 
     # Calcular distancia correspondiente al ID
-    dict_id_mm[i] = (
-        mm_inicial_bloque
-        + (posicion * mm_entre_arucos)
-    )
+    dict_id_mm[i] = mm_inicial_bloque + (posicion * mm_entre_arucos)
 
 
 # ============================================================
@@ -56,20 +49,14 @@ for i in range(id_inicial, id_final + 1):
 # ============================================================
 
 for marker_id, medida_mm in dict_id_mm.items():
-    print(
-        f"ID {marker_id}: "
-        f"{medida_mm:.1f} mm "
-        f"({medida_mm / 10:.1f} cm)"
-    )
+    print(f"ID {marker_id}: {medida_mm:.1f} mm ({medida_mm / 10:.1f} cm)")
 
 
 # ============================================================
 # 1. SELECCIONAR DICCIONARIO ARUCO
 # ============================================================
 
-dictionary = cv2.aruco.getPredefinedDictionary(
-    cv2.aruco.DICT_4X4_1000
-)
+dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_1000)
 
 
 # ============================================================
@@ -83,10 +70,7 @@ parameters = cv2.aruco.DetectorParameters()
 # 3. CREAR DETECTOR
 # ============================================================
 
-detector = cv2.aruco.ArucoDetector(
-    dictionary,
-    parameters
-)
+detector = cv2.aruco.ArucoDetector(dictionary, parameters)
 
 
 # ============================================================
@@ -104,13 +88,11 @@ if not camera.isOpened():
 # ============================================================
 
 while True:
-
     ok, frame = camera.read()
 
     if not ok:
         print("No se pudo leer el frame")
         break
-
 
     # --------------------------------------------------------
     # Detectar ArUcos
@@ -118,64 +100,42 @@ while True:
 
     corners, ids, rejected = detector.detectMarkers(frame)
 
-
     # --------------------------------------------------------
     # Procesar detecciones
     # --------------------------------------------------------
 
     if ids is not None:
-
         # Dibujar ArUcos detectados
-        cv2.aruco.drawDetectedMarkers(
-            frame,
-            corners,
-            ids
-        )
-
+        cv2.aruco.drawDetectedMarkers(frame, corners, ids)
 
         # Lista de medidas correspondientes
         # a los ArUcos detectados
         lista_medidas = []
 
-
         for marker_id in ids.flatten():
-
             if marker_id in dict_id_mm:
-
                 medida_mm = dict_id_mm[marker_id]
 
                 lista_medidas.append(medida_mm)
-
 
         # ----------------------------------------------------
         # Mostrar medida
         # ----------------------------------------------------
 
         if lista_medidas:
-
             # Tomar la menor medida detectada
             medida_mm = min(lista_medidas)
 
             # Convertir mm → cm
             medida_cm = medida_mm / 10
 
-
-            print(
-                "Medida detectada:",
-                round(medida_cm, 1),
-                "cm"
-            )
-
+            print("Medida detectada:", round(medida_cm, 1), "cm")
 
     # --------------------------------------------------------
     # Mostrar imagen
     # --------------------------------------------------------
 
-    cv2.imshow(
-        "Detector ArUco",
-        frame
-    )
-
+    cv2.imshow("Detector ArUco", frame)
 
     # --------------------------------------------------------
     # Salir con Q

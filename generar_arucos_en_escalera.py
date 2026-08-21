@@ -1,7 +1,7 @@
-import cv2
-import numpy as np
 import sys
 
+import cv2
+import numpy as np
 
 # ============================================================
 # ARGUMENTOS
@@ -97,44 +97,27 @@ if cantidad_ids != cantidad_arucos:
 TAMANO_ARUCO = 201
 MARGEN = 40
 
-dictionary = cv2.aruco.getPredefinedDictionary(
-    cv2.aruco.DICT_4X4_1000
-)
+dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_1000)
 
 
 # ============================================================
 # DIMENSIONES
 # ============================================================
 
-ancho = (
-    MARGEN * 2
-    + columnas * TAMANO_ARUCO
-    + (columnas - 1) * separacion
-)
+ancho = MARGEN * 2 + columnas * TAMANO_ARUCO + (columnas - 1) * separacion
 
 
-alto_base = (
-    arucos_por_columna * TAMANO_ARUCO
-    + (arucos_por_columna - 1) * separacion
-)
+alto_base = arucos_por_columna * TAMANO_ARUCO + (arucos_por_columna - 1) * separacion
 
 
-alto = (
-    MARGEN * 2
-    + alto_base
-    + (columnas - 1) * desfase
-)
+alto = MARGEN * 2 + alto_base + (columnas - 1) * desfase
 
 
 # ============================================================
 # CREAR IMAGEN
 # ============================================================
 
-imagen = np.full(
-    (alto, ancho),
-    255,
-    dtype=np.uint8
-)
+imagen = np.full((alto, ancho), 255, dtype=np.uint8)
 
 
 # ============================================================
@@ -142,17 +125,12 @@ imagen = np.full(
 # ============================================================
 
 for columna in range(columnas):
-
     for fila in range(arucos_por_columna):
-
         # ----------------------------------------------------
         # ID
         # ----------------------------------------------------
 
-        posicion = (
-            columna * arucos_por_columna
-            + fila
-        )
+        posicion = columna * arucos_por_columna + fila
 
         marker_id = id_inicio + posicion
 
@@ -160,53 +138,32 @@ for columna in range(columnas):
         # POSICIÓN X
         # ----------------------------------------------------
 
-        x = (
-            MARGEN
-            + columna * (
-                TAMANO_ARUCO + separacion
-            )
-        )
+        x = MARGEN + columna * (TAMANO_ARUCO + separacion)
 
         # ----------------------------------------------------
         # POSICIÓN Y
         # ----------------------------------------------------
 
-        y = (
-            MARGEN
-            + fila * (
-                TAMANO_ARUCO + separacion
-            )
-            + columna * desfase
-        )
+        y = MARGEN + fila * (TAMANO_ARUCO + separacion) + columna * desfase
 
         # ----------------------------------------------------
         # GENERAR ARUCO
         # ----------------------------------------------------
 
-        marker = cv2.aruco.generateImageMarker(
-            dictionary,
-            marker_id,
-            TAMANO_ARUCO
-        )
+        marker = cv2.aruco.generateImageMarker(dictionary, marker_id, TAMANO_ARUCO)
 
         # ----------------------------------------------------
         # COLOCAR ARUCO
         # ----------------------------------------------------
 
-        imagen[
-            y:y + TAMANO_ARUCO,
-            x:x + TAMANO_ARUCO
-        ] = marker
+        imagen[y : y + TAMANO_ARUCO, x : x + TAMANO_ARUCO] = marker
 
 
 # ============================================================
 # GUARDAR
 # ============================================================
 
-cv2.imwrite(
-    "output/arucos_escalera.png",
-    imagen
-)
+cv2.imwrite("output/arucos_escalera.png", imagen)
 
 
 # ============================================================

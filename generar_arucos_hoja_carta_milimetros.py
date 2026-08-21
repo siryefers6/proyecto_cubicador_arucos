@@ -1,7 +1,6 @@
 import cv2
 import numpy as np
 
-
 # ============================================================
 # CONFIGURACIÓN
 # ============================================================
@@ -41,6 +40,7 @@ nombre_archivo = "output/arucos_hoja_carta_milimetrados.png"
 # CONVERSIÓN DE MILÍMETROS A PÍXELES
 # ============================================================
 
+
 def mm_a_pixeles(mm):
     return round(mm * DPI / 25.4)
 
@@ -50,36 +50,23 @@ alto_hoja_px = mm_a_pixeles(alto_hoja_milimetros)
 
 margen_px = mm_a_pixeles(margen_milimetros)
 
-separacion_horizontal_px = mm_a_pixeles(
-    separacion_horizontal_milimetros
-)
+separacion_horizontal_px = mm_a_pixeles(separacion_horizontal_milimetros)
 
-separacion_vertical_px = mm_a_pixeles(
-    separacion_vertical_milimetros
-)
+separacion_vertical_px = mm_a_pixeles(separacion_vertical_milimetros)
 
-tamanio_aruco_px = mm_a_pixeles(
-    tamanio_aruco_milimetros
-)
+tamanio_aruco_px = mm_a_pixeles(tamanio_aruco_milimetros)
 
 
 # ============================================================
 # CÁLCULO DE CANTIDAD DE COLUMNAS
 # ============================================================
 
-espacio_disponible_ancho = (
-    ancho_hoja_px
-    - 2 * margen_px
-)
+espacio_disponible_ancho = ancho_hoja_px - 2 * margen_px
 
-ancho_por_aruco = (
-    tamanio_aruco_px
-    + separacion_horizontal_px
-)
+ancho_por_aruco = tamanio_aruco_px + separacion_horizontal_px
 
 cantidad_columnas = (
-    espacio_disponible_ancho
-    + separacion_horizontal_px
+    espacio_disponible_ancho + separacion_horizontal_px
 ) // ancho_por_aruco
 
 
@@ -89,9 +76,7 @@ cantidad_columnas = (
 
 cantidad_ids = id_final - id_inicial + 1
 
-cantidad_maxima_arucos = (
-    cantidad_columnas * cantidad_arucos_por_columna
-)
+cantidad_maxima_arucos = cantidad_columnas * cantidad_arucos_por_columna
 
 if cantidad_ids > cantidad_maxima_arucos:
     raise ValueError(
@@ -101,28 +86,21 @@ if cantidad_ids > cantidad_maxima_arucos:
     )
 
 if id_inicial < 0 or id_final >= 1000:
-    raise ValueError(
-        "DICT_4X4_1000 permite IDs desde 0 hasta 999."
-    )
+    raise ValueError("DICT_4X4_1000 permite IDs desde 0 hasta 999.")
 
 
 # ============================================================
 # CREAR HOJA BLANCA
 # ============================================================
 
-hoja = np.ones(
-    (alto_hoja_px, ancho_hoja_px),
-    dtype=np.uint8
-) * 255
+hoja = np.ones((alto_hoja_px, ancho_hoja_px), dtype=np.uint8) * 255
 
 
 # ============================================================
 # CREAR DICCIONARIO ARUCO
 # ============================================================
 
-dictionary = cv2.aruco.getPredefinedDictionary(
-    diccionario_aruco
-)
+dictionary = cv2.aruco.getPredefinedDictionary(diccionario_aruco)
 
 
 # ============================================================
@@ -132,9 +110,7 @@ dictionary = cv2.aruco.getPredefinedDictionary(
 id_actual = id_inicial
 
 for columna in range(int(cantidad_columnas)):
-
     for fila in range(cantidad_arucos_por_columna):
-
         # Si ya colocamos todos los IDs, terminamos
         if id_actual > id_final:
             break
@@ -143,40 +119,21 @@ for columna in range(int(cantidad_columnas)):
         # Posición del ArUco
         # ----------------------------------------------------
 
-        x = (
-            margen_px
-            + columna * (
-                tamanio_aruco_px
-                + separacion_horizontal_px
-            )
-        )
+        x = margen_px + columna * (tamanio_aruco_px + separacion_horizontal_px)
 
-        y = (
-            margen_px
-            + fila * (
-                tamanio_aruco_px
-                + separacion_vertical_px
-            )
-        )
+        y = margen_px + fila * (tamanio_aruco_px + separacion_vertical_px)
 
         # ----------------------------------------------------
         # Crear ArUco
         # ----------------------------------------------------
 
-        aruco = cv2.aruco.generateImageMarker(
-            dictionary,
-            id_actual,
-            tamanio_aruco_px
-        )
+        aruco = cv2.aruco.generateImageMarker(dictionary, id_actual, tamanio_aruco_px)
 
         # ----------------------------------------------------
         # Colocar ArUco sobre la hoja
         # ----------------------------------------------------
 
-        hoja[
-            y:y + tamanio_aruco_px,
-            x:x + tamanio_aruco_px
-        ] = aruco
+        hoja[y : y + tamanio_aruco_px, x : x + tamanio_aruco_px] = aruco
 
         print(
             f"ArUco ID {id_actual}: "
@@ -192,10 +149,7 @@ for columna in range(int(cantidad_columnas)):
 # GUARDAR IMAGEN
 # ============================================================
 
-cv2.imwrite(
-    nombre_archivo,
-    hoja
-)
+cv2.imwrite(nombre_archivo, hoja)
 
 
 # ============================================================
@@ -210,14 +164,8 @@ print(f"Hoja: {ancho_hoja_milimetros} x {alto_hoja_milimetros} mm")
 print(f"Resolución: {ancho_hoja_px} x {alto_hoja_px} px")
 print(f"Tamaño ArUco: {tamanio_aruco_milimetros} mm")
 print(f"Margen: {margen_milimetros} mm")
-print(
-    f"Separación horizontal: "
-    f"{separacion_horizontal_milimetros} mm"
-)
-print(
-    f"Separación vertical: "
-    f"{separacion_vertical_milimetros} mm"
-)
+print(f"Separación horizontal: {separacion_horizontal_milimetros} mm")
+print(f"Separación vertical: {separacion_vertical_milimetros} mm")
 print(f"Columnas: {cantidad_columnas}")
 print(f"ArUcos por columna: {cantidad_arucos_por_columna}")
 print(f"IDs: {id_inicial} - {id_final}")
