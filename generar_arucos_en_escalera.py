@@ -7,22 +7,23 @@ import numpy as np
 # ARGUMENTOS
 # ============================================================
 
-if len(sys.argv) != 7:
+if len(sys.argv) != 8:
     print(
         "Uso: python generar_arucos.py "
         "<columnas> <arucos_por_columna> "
-        "<separacion> <desfase> "
-        "<id_inicio> <id_fin>"
+        "<separacion_horizontal> <separacion_vertical> "
+        "<desfase> <id_inicio> <id_fin>"
     )
     sys.exit(1)
 
 
 columnas = int(sys.argv[1])
 arucos_por_columna = int(sys.argv[2])
-separacion = int(sys.argv[3])
-desfase = int(sys.argv[4])
-id_inicio = int(sys.argv[5])
-id_fin = int(sys.argv[6])
+separacion_horizontal = int(sys.argv[3])
+separacion_vertical = int(sys.argv[4])
+desfase = int(sys.argv[5])
+id_inicio = int(sys.argv[6])
+id_fin = int(sys.argv[7])
 
 
 # ============================================================
@@ -37,8 +38,12 @@ if arucos_por_columna <= 0:
     print("La cantidad de ArUcos por columna debe ser mayor que 0.")
     sys.exit(1)
 
-if separacion < 0:
-    print("La separación no puede ser negativa.")
+if separacion_horizontal < 0:
+    print("La separación horizontal no puede ser negativa.")
+    sys.exit(1)
+
+if separacion_vertical < 0:
+    print("La separación vertical no puede ser negativa.")
     sys.exit(1)
 
 if desfase < 0:
@@ -63,7 +68,6 @@ if id_fin > 999:
 # ============================================================
 
 cantidad_arucos = columnas * arucos_por_columna
-
 cantidad_ids = id_fin - id_inicio + 1
 
 
@@ -75,13 +79,13 @@ if cantidad_ids != cantidad_arucos:
     print()
     print("ERROR: La cantidad de IDs no coincide con la distribución.")
     print()
-    print(f"Columnas:             {columnas}")
-    print(f"ArUcos por columna:   {arucos_por_columna}")
-    print(f"Posiciones disponibles: {cantidad_arucos}")
+    print(f"Columnas:                  {columnas}")
+    print(f"ArUcos por columna:        {arucos_por_columna}")
+    print(f"Posiciones disponibles:    {cantidad_arucos}")
     print()
-    print(f"ID inicial:           {id_inicio}")
-    print(f"ID final:             {id_fin}")
-    print(f"IDs solicitados:      {cantidad_ids}")
+    print(f"ID inicial:                {id_inicio}")
+    print(f"ID final:                  {id_fin}")
+    print(f"IDs solicitados:           {cantidad_ids}")
     print()
     print(
         "El rango de IDs debe contener exactamente "
@@ -95,29 +99,44 @@ if cantidad_ids != cantidad_arucos:
 # ============================================================
 
 TAMANO_ARUCO = 201
-MARGEN = 40
+MARGEN = 30
 
-dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_1000)
+dictionary = cv2.aruco.getPredefinedDictionary(
+    cv2.aruco.DICT_4X4_1000
+)
 
 
 # ============================================================
 # DIMENSIONES
 # ============================================================
 
-ancho = MARGEN * 2 + columnas * TAMANO_ARUCO + (columnas - 1) * separacion
+ancho = (
+    MARGEN * 2
+    + columnas * TAMANO_ARUCO
+    + (columnas - 1) * separacion_horizontal
+)
 
+alto_base = (
+    arucos_por_columna * TAMANO_ARUCO
+    + (arucos_por_columna - 1) * separacion_vertical
+)
 
-alto_base = arucos_por_columna * TAMANO_ARUCO + (arucos_por_columna - 1) * separacion
-
-
-alto = MARGEN * 2 + alto_base + (columnas - 1) * desfase
+alto = (
+    MARGEN * 2
+    + alto_base
+    + (columnas - 1) * desfase
+)
 
 
 # ============================================================
 # CREAR IMAGEN
 # ============================================================
 
-imagen = np.full((alto, ancho), 255, dtype=np.uint8)
+imagen = np.full(
+    (alto, ancho),
+    255,
+    dtype=np.uint8
+)
 
 
 # ============================================================
@@ -125,12 +144,17 @@ imagen = np.full((alto, ancho), 255, dtype=np.uint8)
 # ============================================================
 
 for columna in range(columnas):
+
     for fila in range(arucos_por_columna):
+
         # ----------------------------------------------------
         # ID
         # ----------------------------------------------------
 
-        posicion = columna * arucos_por_columna + fila
+        posicion = (
+            columna * arucos_por_columna
+            + fila
+        )
 
         marker_id = id_inicio + posicion
 
@@ -138,32 +162,55 @@ for columna in range(columnas):
         # POSICIÓN X
         # ----------------------------------------------------
 
-        x = MARGEN + columna * (TAMANO_ARUCO + separacion)
+        x = (
+            MARGEN
+            + columna * (
+                TAMANO_ARUCO
+                + separacion_horizontal
+            )
+        )
 
         # ----------------------------------------------------
         # POSICIÓN Y
         # ----------------------------------------------------
 
-        y = MARGEN + fila * (TAMANO_ARUCO + separacion) + columna * desfase
+        y = (
+            MARGEN
+            + fila * (
+                TAMANO_ARUCO
+                + separacion_vertical
+            )
+            + columna * desfase
+        )
 
         # ----------------------------------------------------
         # GENERAR ARUCO
         # ----------------------------------------------------
 
-        marker = cv2.aruco.generateImageMarker(dictionary, marker_id, TAMANO_ARUCO)
+        marker = cv2.aruco.generateImageMarker(
+            dictionary,
+            marker_id,
+            TAMANO_ARUCO
+        )
 
         # ----------------------------------------------------
         # COLOCAR ARUCO
         # ----------------------------------------------------
 
-        imagen[y : y + TAMANO_ARUCO, x : x + TAMANO_ARUCO] = marker
+        imagen[
+            y : y + TAMANO_ARUCO,
+            x : x + TAMANO_ARUCO
+        ] = marker
 
 
 # ============================================================
 # GUARDAR
 # ============================================================
 
-cv2.imwrite("output/arucos_escalera.png", imagen)
+cv2.imwrite(
+    "output/arucos_escalera.png",
+    imagen
+)
 
 
 # ============================================================
@@ -176,24 +223,29 @@ print("       GENERADOR DE ARUCOS")
 print("========================================")
 print()
 
-print(f"Columnas:              {columnas}")
-print(f"ArUcos por columna:    {arucos_por_columna}")
-print(f"Total de ArUcos:       {cantidad_arucos}")
-print(f"ID inicial:            {id_inicio}")
-print(f"ID final:              {id_fin}")
-print(f"Separación:            {separacion}px")
-print(f"Desfase:               {desfase}px")
-print(f"Tamaño ArUco:          {TAMANO_ARUCO}px")
-print(f"Tamaño imagen:         {ancho} x {alto}px")
+print(f"Columnas:                  {columnas}")
+print(f"ArUcos por columna:        {arucos_por_columna}")
+print(f"Total de ArUcos:           {cantidad_arucos}")
+print(f"ID inicial:                {id_inicio}")
+print(f"ID final:                  {id_fin}")
+print(f"Separación horizontal:     {separacion_horizontal}px")
+print(f"Separación vertical:       {separacion_vertical}px")
+print(f"Desfase:                   {desfase}px")
+print(f"Tamaño ArUco:              {TAMANO_ARUCO}px")
+print(f"Tamaño imagen:             {ancho} x {alto}px")
 print()
 
-print("Imagen generada: arucos.png")
+print("Imagen generada: output/arucos_escalera.png")
 print()
 
 """
 
 # Ejemplo de uso:
-python generar_arucos.py 6 20 20 10 0 119
-python generar_arucos.py <columnas> <arucos_por_columna> <separacion> <desfase> <id_inicio> <id_fin>
+python generar_arucos.py <columnas> <arucos_por_columna> <separacion_horizontal> <separacion_vertical> <desfase> <id_inicio> <id_fin>
 
+## Generar arucos de 2cm 0.5mm separación
+python3 generar_arucos_en_escalera.py 5 20 15 50 50 0 99
+python3 generar_arucos_en_escalera.py 5 20 15 50 50 100 199
+python3 generar_arucos_en_escalera.py 5 20 15 50 50 200 299
+python3 generar_arucos_en_escalera.py 5 20 15 50 50 300 399
 """
