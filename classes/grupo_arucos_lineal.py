@@ -36,3 +36,23 @@ class GrupoArucosLineal:
             )
 
         return distancia
+
+    def medir(self, lista_ids_arucos: list) -> int:
+        """
+        Calcula cual es la menor medida en la fila de ArUcos.
+
+        Args:
+            lista_ids_arucos (list): Lista de ids de ArUcos detectados.
+
+        Returns:
+            int: Medida en milimetros.
+        """
+        ids_validos = [
+            id_aruco
+            for id_aruco in lista_ids_arucos
+            if self.id_inicial <= id_aruco <= self.id_final
+        ]
+
+        id_menor = min(ids_validos, default=self.id_inicial)
+
+        return self.calcular_distancia_aruco(id_menor)

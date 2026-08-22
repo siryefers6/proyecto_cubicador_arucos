@@ -56,3 +56,37 @@ def test_calcular_distancia_aruco():
     assert distancia_aruco_0 == 20
     assert distancia_aruco_1 == 45
     assert distancia_aruco_2 == 70
+
+def test_medir():
+    """
+    Probar método medir
+    """
+    # Arrange
+    id_inicial = 0
+    id_final = 19
+    milimetros_pared_a_primer_aruco = 20
+    tamanio_aruco_milimetros = 20
+    separacion_arucos_en_milimetros = 5
+    esquina_referencia_medicion = 0
+
+    grupo_arucos_lineal = GrupoArucosLineal(
+        id_inicial,
+        id_final,
+        milimetros_pared_a_primer_aruco,
+        tamanio_aruco_milimetros,
+        separacion_arucos_en_milimetros,
+        esquina_referencia_medicion,
+    )
+
+    lista_ids_0 = [3, 20, 22, 31, 45, 73]
+    lista_ids_1 = []
+
+    # Act
+    medida_0 = grupo_arucos_lineal.medir(lista_ids_0)
+    medida_1 = grupo_arucos_lineal.medir(lista_ids_1)
+
+    # Assert
+    assert medida_0 == 95
+    assert medida_1 == 20
+
+
