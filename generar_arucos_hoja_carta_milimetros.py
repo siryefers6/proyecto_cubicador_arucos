@@ -6,25 +6,25 @@ import numpy as np
 # ============================================================
 
 # IDs de los ArUco que se quieren generar
-id_inicial = 0
-id_final = 41
+id_inicial = 240
+id_final = 319
 
 # Cantidad de ArUcos que habrá verticalmente en cada columna
-cantidad_arucos_por_columna = 7
+cantidad_arucos_por_columna = 10
 
 # Dimensiones de la hoja carta
 ancho_hoja_milimetros = 215.9
 alto_hoja_milimetros = 279.4
 
 # Márgenes
-margen_milimetros = 2
+margen_milimetros = 1.42
 
 # Separación entre ArUcos
 separacion_horizontal_milimetros = 5
 separacion_vertical_milimetros = 5
 
 # Tamaño de cada ArUco
-tamanio_aruco_milimetros = 31
+tamanio_aruco_milimetros = 21
 
 # Resolución de la imagen
 DPI = 600
