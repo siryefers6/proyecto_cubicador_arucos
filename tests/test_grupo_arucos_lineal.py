@@ -25,3 +25,34 @@ def test_inicializar_clase_grupo_arucos_lineal():
 
     # Assert
     assert grupo_arucos_lineal.id_inicial == 0
+
+def test_calcular_distancia_aruco():
+    """
+    Probar método calcular_distancia_aruco
+    """
+    # Arrange
+    id_inicial = 0
+    id_final = 99
+    milimetros_pared_a_primer_aruco = 20
+    tamanio_aruco_milimetros = 20
+    separacion_arucos_en_milimetros = 5
+    esquina_referencia_medicion = 0
+
+    grupo_arucos_lineal = GrupoArucosLineal(
+        id_inicial,
+        id_final,
+        milimetros_pared_a_primer_aruco,
+        tamanio_aruco_milimetros,
+        separacion_arucos_en_milimetros,
+        esquina_referencia_medicion,
+    )
+
+    # Act
+    distancia_aruco_0 = grupo_arucos_lineal.calcular_distancia_aruco(0)
+    distancia_aruco_1 = grupo_arucos_lineal.calcular_distancia_aruco(1)
+    distancia_aruco_2 = grupo_arucos_lineal.calcular_distancia_aruco(2)
+
+    # Assert
+    assert distancia_aruco_0 == 20
+    assert distancia_aruco_1 == 45
+    assert distancia_aruco_2 == 70
