@@ -1,5 +1,6 @@
 from utils.functions import calcular_distancia_grupo_arucos
 
+
 def test_calcular_distancia_grupo_arucos():
     """
     Comprobar la función calcular_distancia_grupo_arucos
