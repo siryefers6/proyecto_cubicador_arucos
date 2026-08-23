@@ -4,13 +4,23 @@ from statistics import mode
 import cv2
 
 from classes.grupo_arucos_lineal import GrupoArucosLineal
+from classes.registro_medicion import RegistroMedicion
 from utils.functions import calcular_distancia_grupo_arucos
 
+# Crear una instancia para registro
+registro = RegistroMedicion()
+
+
 # Cargar cámaras con preferencias
+print("Inicializando cámaras...")
 camera_0 = cv2.VideoCapture(0)
 camera_2 = cv2.VideoCapture(2)
 camera_4 = cv2.VideoCapture(4)
 camera_6 = cv2.VideoCapture(6)
+
+# Mostrar o no imagenes de cámaras
+mostrar_imagenes_camaras = False
+dibujar_arucos = False
 
 # Configurar y medir filas de arucos
 # Grupo de ArUcos camera_0
@@ -211,6 +221,10 @@ lista_ancho = []
 lista_largo = []
 lista_alto = []
 lista_volumen = []
+objeto_detectado = False
+numero_frame = 0
+mostrar_mensaje_esperando = True
+medicion_guardada = False
 
 while True:
     # Inicializar variables de medidas objeto
@@ -232,88 +246,204 @@ while True:
 
     start_time = time.time()
 
+    numero_frame += 1
+
     # Detectar ArUcos
-    corners_cam_0, ids_cam_0, _ = detector.detectMarkers(frame_cam_0)
-    corners_cam_2, ids_cam_2, _ = detector.detectMarkers(frame_cam_2)
-    corners_cam_4, ids_cam_4, _ = detector.detectMarkers(frame_cam_4)
-    corners_cam_6, ids_cam_6, _ = detector.detectMarkers(frame_cam_6)
+    if not objeto_detectado:
+        if numero_frame % 5 == 0:
+            corners_cam_0, ids_cam_0, _ = detector.detectMarkers(frame_cam_0)
+            corners_cam_2, ids_cam_2, _ = detector.detectMarkers(frame_cam_2)
+            corners_cam_4, ids_cam_4, _ = detector.detectMarkers(frame_cam_4)
+            corners_cam_6, ids_cam_6, _ = detector.detectMarkers(frame_cam_6)
 
-    # Dibujar ArUcos y almacenar medidas de las 3 dimenciones
-    if ids_cam_0 is not None:
-        cv2.aruco.drawDetectedMarkers(frame_cam_0, corners_cam_0, ids_cam_0)
-        ancho = calcular_distancia_grupo_arucos(
-            [
-                arucos_camara_0_fila_1.medir(ids_cam_0.flatten()),
-                arucos_camara_0_fila_2.medir(ids_cam_0.flatten()),
-                arucos_camara_0_fila_3.medir(ids_cam_0.flatten()),
-                arucos_camara_0_fila_4.medir(ids_cam_0.flatten()),
-                arucos_camara_0_fila_5.medir(ids_cam_0.flatten()),
-            ]
-        )
+            # Dibujar ArUcos y almacenar medidas de las 3 dimenciones
+            if ids_cam_0 is not None:
+                if dibujar_arucos:
+                    cv2.aruco.drawDetectedMarkers(frame_cam_0, corners_cam_0, ids_cam_0)
+                ancho = calcular_distancia_grupo_arucos(
+                    [
+                        arucos_camara_0_fila_1.medir(ids_cam_0.flatten()),
+                        arucos_camara_0_fila_2.medir(ids_cam_0.flatten()),
+                        arucos_camara_0_fila_3.medir(ids_cam_0.flatten()),
+                        arucos_camara_0_fila_4.medir(ids_cam_0.flatten()),
+                        arucos_camara_0_fila_5.medir(ids_cam_0.flatten()),
+                    ]
+                )
 
-    if ids_cam_2 is not None:
-        cv2.aruco.drawDetectedMarkers(frame_cam_2, corners_cam_2, ids_cam_2)
-        largo_1 = calcular_distancia_grupo_arucos(
-            [
-                arucos_camara_2_fila_1.medir(ids_cam_2.flatten()),
-                arucos_camara_2_fila_2.medir(ids_cam_2.flatten()),
-                arucos_camara_2_fila_3.medir(ids_cam_2.flatten()),
-                arucos_camara_2_fila_4.medir(ids_cam_2.flatten()),
-                arucos_camara_2_fila_5.medir(ids_cam_2.flatten()),
-            ]
-        )
+            if ids_cam_2 is not None:
+                if dibujar_arucos:
+                    cv2.aruco.drawDetectedMarkers(frame_cam_2, corners_cam_2, ids_cam_2)
+                largo_1 = calcular_distancia_grupo_arucos(
+                    [
+                        arucos_camara_2_fila_1.medir(ids_cam_2.flatten()),
+                        arucos_camara_2_fila_2.medir(ids_cam_2.flatten()),
+                        arucos_camara_2_fila_3.medir(ids_cam_2.flatten()),
+                        arucos_camara_2_fila_4.medir(ids_cam_2.flatten()),
+                        arucos_camara_2_fila_5.medir(ids_cam_2.flatten()),
+                    ]
+                )
 
-    if ids_cam_4 is not None:
-        cv2.aruco.drawDetectedMarkers(frame_cam_4, corners_cam_4, ids_cam_4)
-        largo_2 = calcular_distancia_grupo_arucos(
-            [
-                arucos_camara_4_fila_1.medir(ids_cam_4.flatten()),
-                arucos_camara_4_fila_2.medir(ids_cam_4.flatten()),
-                arucos_camara_4_fila_3.medir(ids_cam_4.flatten()),
-                arucos_camara_4_fila_4.medir(ids_cam_4.flatten()),
-                arucos_camara_4_fila_5.medir(ids_cam_4.flatten()),
-            ]
-        )
+            if ids_cam_4 is not None:
+                if dibujar_arucos:
+                    cv2.aruco.drawDetectedMarkers(frame_cam_4, corners_cam_4, ids_cam_4)
+                largo_2 = calcular_distancia_grupo_arucos(
+                    [
+                        arucos_camara_4_fila_1.medir(ids_cam_4.flatten()),
+                        arucos_camara_4_fila_2.medir(ids_cam_4.flatten()),
+                        arucos_camara_4_fila_3.medir(ids_cam_4.flatten()),
+                        arucos_camara_4_fila_4.medir(ids_cam_4.flatten()),
+                        arucos_camara_4_fila_5.medir(ids_cam_4.flatten()),
+                    ]
+                )
 
-    if ids_cam_6 is not None:
-        cv2.aruco.drawDetectedMarkers(frame_cam_6, corners_cam_6, ids_cam_6)
-        alto = calcular_distancia_grupo_arucos(
-            [
-                arucos_camara_6_fila_1.medir(ids_cam_6.flatten()),
-                arucos_camara_6_fila_2.medir(ids_cam_6.flatten()),
-                arucos_camara_6_fila_3.medir(ids_cam_6.flatten()),
-                arucos_camara_6_fila_4.medir(ids_cam_6.flatten()),
-                arucos_camara_6_fila_5.medir(ids_cam_6.flatten()),
-            ]
-        )
+            if ids_cam_6 is not None:
+                if dibujar_arucos:
+                    cv2.aruco.drawDetectedMarkers(frame_cam_6, corners_cam_6, ids_cam_6)
+                alto = calcular_distancia_grupo_arucos(
+                    [
+                        arucos_camara_6_fila_1.medir(ids_cam_6.flatten()),
+                        arucos_camara_6_fila_2.medir(ids_cam_6.flatten()),
+                        arucos_camara_6_fila_3.medir(ids_cam_6.flatten()),
+                        arucos_camara_6_fila_4.medir(ids_cam_6.flatten()),
+                        arucos_camara_6_fila_5.medir(ids_cam_6.flatten()),
+                    ]
+                )
+
+    else:
+        corners_cam_0, ids_cam_0, _ = detector.detectMarkers(frame_cam_0)
+        corners_cam_2, ids_cam_2, _ = detector.detectMarkers(frame_cam_2)
+        corners_cam_4, ids_cam_4, _ = detector.detectMarkers(frame_cam_4)
+        corners_cam_6, ids_cam_6, _ = detector.detectMarkers(frame_cam_6)
+
+        # Dibujar ArUcos y almacenar medidas de las 3 dimenciones
+        if ids_cam_0 is not None:
+            if dibujar_arucos:
+                cv2.aruco.drawDetectedMarkers(frame_cam_0, corners_cam_0, ids_cam_0)
+            ancho = calcular_distancia_grupo_arucos(
+                [
+                    arucos_camara_0_fila_1.medir(ids_cam_0.flatten()),
+                    arucos_camara_0_fila_2.medir(ids_cam_0.flatten()),
+                    arucos_camara_0_fila_3.medir(ids_cam_0.flatten()),
+                    arucos_camara_0_fila_4.medir(ids_cam_0.flatten()),
+                    arucos_camara_0_fila_5.medir(ids_cam_0.flatten()),
+                ]
+            )
+
+        if ids_cam_2 is not None:
+            if dibujar_arucos:
+                cv2.aruco.drawDetectedMarkers(frame_cam_2, corners_cam_2, ids_cam_2)
+            largo_1 = calcular_distancia_grupo_arucos(
+                [
+                    arucos_camara_2_fila_1.medir(ids_cam_2.flatten()),
+                    arucos_camara_2_fila_2.medir(ids_cam_2.flatten()),
+                    arucos_camara_2_fila_3.medir(ids_cam_2.flatten()),
+                    arucos_camara_2_fila_4.medir(ids_cam_2.flatten()),
+                    arucos_camara_2_fila_5.medir(ids_cam_2.flatten()),
+                ]
+            )
+
+        if ids_cam_4 is not None:
+            if dibujar_arucos:
+                cv2.aruco.drawDetectedMarkers(frame_cam_4, corners_cam_4, ids_cam_4)
+            largo_2 = calcular_distancia_grupo_arucos(
+                [
+                    arucos_camara_4_fila_1.medir(ids_cam_4.flatten()),
+                    arucos_camara_4_fila_2.medir(ids_cam_4.flatten()),
+                    arucos_camara_4_fila_3.medir(ids_cam_4.flatten()),
+                    arucos_camara_4_fila_4.medir(ids_cam_4.flatten()),
+                    arucos_camara_4_fila_5.medir(ids_cam_4.flatten()),
+                ]
+            )
+
+        if ids_cam_6 is not None:
+            if dibujar_arucos:
+                cv2.aruco.drawDetectedMarkers(frame_cam_6, corners_cam_6, ids_cam_6)
+            alto = calcular_distancia_grupo_arucos(
+                [
+                    arucos_camara_6_fila_1.medir(ids_cam_6.flatten()),
+                    arucos_camara_6_fila_2.medir(ids_cam_6.flatten()),
+                    arucos_camara_6_fila_3.medir(ids_cam_6.flatten()),
+                    arucos_camara_6_fila_4.medir(ids_cam_6.flatten()),
+                    arucos_camara_6_fila_5.medir(ids_cam_6.flatten()),
+                ]
+            )
 
     # Calcular largo final
-    largo = largo_1 + largo_2 - 5
+    largo = largo_1 + largo_2
 
     # Calcular volumen
     volumen = largo * alto * ancho
 
+    if volumen <= 210000:
+        objeto_detectado = False
+    elif volumen > 210000:
+        objeto_detectado = True
+
+    # Limpiar listas si no hay objeto en el cubicador
+    if not objeto_detectado:
+        lista_alto.clear()
+        lista_ancho.clear()
+        lista_largo.clear()
+        lista_volumen.clear()
+
+        if medicion_guardada:
+            mostrar_mensaje_esperando = True
+
+        medicion_guardada = False
+
     # Almacenar en una lista las medidas para sacar la moda
-    lista_alto.append(alto)
-    lista_alto = lista_alto[-30:]
-    lista_largo.append(largo)
-    lista_largo = lista_largo[-30:]
-    lista_ancho.append(ancho)
-    lista_ancho = lista_ancho[-30:]
-    lista_volumen.append(volumen)
-    lista_volumen = lista_volumen[-30:]
+    if objeto_detectado:
+        lista_alto.append(alto)
+        lista_alto = lista_alto[-10:]
+
+        lista_largo.append(largo)
+        lista_largo = lista_largo[-10:]
+
+        lista_ancho.append(ancho)
+        lista_ancho = lista_ancho[-10:]
+
+        lista_volumen.append(volumen)
+        lista_volumen = lista_volumen[-10:]
+
+
+        if len(lista_alto) >= 10 and not medicion_guardada:
+            registro.guardar(
+                frame_cam_0=frame_cam_0,
+                frame_cam_2=frame_cam_2,
+                frame_cam_4=frame_cam_4,
+                frame_cam_6=frame_cam_6,
+                largo=mode(lista_largo),
+                alto=mode(lista_alto),
+                ancho=mode(lista_ancho),
+                volumen=mode(lista_volumen),
+            )
+
+            medicion_guardada = True
+
+
+            print("Objeto registrado con éxito!!!")
+            print("Ya puede retirar el objeto\n")
+
+        elif len(lista_alto) < 10:
+            print("-------------------------")
+            print(f"Alto: {mode(lista_alto) / 10:.2f} cm")
+            print(f"Largo: {mode(lista_largo) / 10:.2f} cm")
+            print(f"Ancho: {mode(lista_ancho) / 10:.2f} cm")
+            print(f"Volumen: {mode(lista_volumen) / 1000:.2f} cm cúbicos")
+            print("-------------------------\n")
+
 
     # Mostrar imagenes de las camaras
-    cv2.imshow("Camara 0", frame_cam_0)
-    cv2.imshow("Camara 2", frame_cam_2)
-    cv2.imshow("Camara 4", frame_cam_4)
-    cv2.imshow("Camara 6", frame_cam_6)
+    if mostrar_imagenes_camaras:
+        cv2.imshow("Camara 0", frame_cam_0)
+        cv2.imshow("Camara 2", frame_cam_2)
+        cv2.imshow("Camara 4", frame_cam_4)
+        cv2.imshow("Camara 6", frame_cam_6)
 
-    # Mostrar medidas
-    print(f"Alto: {mode(lista_alto) / 10:.1f}")
-    print(f"Largo: {mode(lista_largo) / 10:.1f}")
-    print(f"Ancho: {mode(lista_ancho) / 10:.1f}")
-    print(f"Volumen: {mode(lista_volumen) / 10:.1f}")
+
+    if not objeto_detectado and mostrar_mensaje_esperando:
+        print("Esperando objeto para medir...\n")
+        mostrar_mensaje_esperando = False
 
     # Calcular espera para fps
     elapsed_time = time.time() - start_time
