@@ -7,32 +7,10 @@ from classes.grupo_arucos_lineal import GrupoArucosLineal
 from utils.functions import calcular_distancia_grupo_arucos
 
 # Cargar cámaras con preferencias
-camera_0 = cv2.VideoCapture(0, cv2.CAP_V4L2)
-camera_0.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
-# camera_0.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-# camera_0.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-camera_0.set(cv2.CAP_PROP_FPS, 15)
-
-
-camera_2 = cv2.VideoCapture(2, cv2.CAP_V4L2)
-camera_2.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
-# camera_2.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-# camera_2.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-camera_2.set(cv2.CAP_PROP_FPS, 15)
-
-
-camera_4 = cv2.VideoCapture(4, cv2.CAP_V4L2)
-camera_4.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
-# camera_4.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-# camera_4.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-camera_4.set(cv2.CAP_PROP_FPS, 15)
-
-
-camera_6 = cv2.VideoCapture(6, cv2.CAP_V4L2)
-camera_6.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
-# camera_6.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
-# camera_6.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-camera_6.set(cv2.CAP_PROP_FPS, 15)
+camera_0 = cv2.VideoCapture(0)
+camera_2 = cv2.VideoCapture(2)
+camera_4 = cv2.VideoCapture(4)
+camera_6 = cv2.VideoCapture(6)
 
 # Configurar y medir filas de arucos
 # Grupo de ArUcos camera_0
@@ -227,7 +205,7 @@ parameters = cv2.aruco.DetectorParameters()
 detector = cv2.aruco.ArucoDetector(dictionary, parameters)
 
 # fps a mostrar
-fps_por_segundo = 3
+fps_por_segundo = 5
 
 lista_ancho = []
 lista_largo = []
