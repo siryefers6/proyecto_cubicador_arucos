@@ -30,9 +30,7 @@ class RegistroMedicion:
                     "id",
                     "fecha_registro",
                     "foto_cam_0",
-                    "foto_cam_2",
-                    "foto_cam_4",
-                    "foto_cam_6",
+                    "foto_cam_1",
                     "largo_mm",
                     "alto_mm",
                     "ancho_mm",
@@ -43,9 +41,7 @@ class RegistroMedicion:
     def guardar(
         self,
         frame_cam_0,
-        frame_cam_2,
-        frame_cam_4,
-        frame_cam_6,
+        frame_cam_1,
         largo: float,
         alto: float,
         ancho: float,
@@ -57,16 +53,12 @@ class RegistroMedicion:
 
         nombres_fotos = {
             "cam_0": f"{id_medicion}_cam0.jpg",
-            "cam_2": f"{id_medicion}_cam2.jpg",
-            "cam_4": f"{id_medicion}_cam4.jpg",
-            "cam_6": f"{id_medicion}_cam6.jpg",
+            "cam_1": f"{id_medicion}_cam1.jpg",
         }
 
         frames = {
             "cam_0": frame_cam_0,
-            "cam_2": frame_cam_2,
-            "cam_4": frame_cam_4,
-            "cam_6": frame_cam_6,
+            "cam_1": frame_cam_1,
         }
 
         for camara, frame in frames.items():
@@ -81,9 +73,7 @@ class RegistroMedicion:
                     id_medicion,
                     fecha.strftime("%Y-%m-%d %H:%M:%S"),
                     nombres_fotos["cam_0"],
-                    nombres_fotos["cam_2"],
-                    nombres_fotos["cam_4"],
-                    nombres_fotos["cam_6"],
+                    nombres_fotos["cam_1"],
                     largo,
                     alto,
                     ancho,

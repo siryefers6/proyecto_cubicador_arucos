@@ -5,6 +5,7 @@ import cv2
 
 import config
 from classes.camera_thread import CameraThread
+from classes.registro_medicion import RegistroMedicion
 from utils.functions import calcular_distancia_grupo_arucos
 
 # Configuración
@@ -14,10 +15,15 @@ MOSTRAR_FRAME = True
 
 DIBUJAR_ARUCOS = True
 
+CANTIDAD_MEDICIONES_VALIDAS = 50
+
+# Cargar arucos medidos
 arucos_alto = config.arucos_alto
 arucos_largo = config.arucos_largo
 arucos_ancho = config.arucos_ancho
 
+# Crear una instancia para registro
+registro = RegistroMedicion()
 
 # Detector ArUco
 dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_1000)
@@ -109,15 +115,14 @@ try:
                     ]
                 )
 
-
                 # Registrar medidas en lista si volumen > 50000
-                if (ancho > 25 and largo > 25 and alto > 25) and not medicion_realizada:
+                if (ancho > 25 and largo > 175 and alto > 25) and not medicion_realizada:
                     list_ancho.append(ancho)
-                    list_ancho = list_ancho[-20:]
+                    list_ancho = list_ancho[-CANTIDAD_MEDICIONES_VALIDAS:]
                     list_largo.append(largo)
-                    list_largo = list_largo[-20:]
+                    list_largo = list_largo[-CANTIDAD_MEDICIONES_VALIDAS:]
                     list_alto.append(alto)
-                    list_alto = list_alto[-20:]
+                    list_alto = list_alto[-CANTIDAD_MEDICIONES_VALIDAS:]
 
                     # Mostrar medidas validas que serán registradas
                     print("----------")
@@ -125,34 +130,48 @@ try:
                     print(f"largo: {largo} mm")
                     print(f"alto: {alto} mm")
                     print("**********")
-                    print(f"ancho: {ancho/10:.2f} cm")
-                    print(f"largo: {largo/10:.2f} cm")
-                    print(f"alto: {alto/10:.2f} cm")
+                    print(f"ancho: {ancho / 10:.2f} cm")
+                    print(f"largo: {largo / 10:.2f} cm")
+                    print(f"alto: {alto / 10:.2f} cm")
                     print("----------")
 
                     # Guardar medidas si ya hay 10 registros
-                    if len(list_ancho) == 20 and len(list_largo) == 20 and len(list_alto) == 20:
+                    if (
+                        len(list_ancho) == CANTIDAD_MEDICIONES_VALIDAS
+                        and len(list_largo) == CANTIDAD_MEDICIONES_VALIDAS
+                        and len(list_alto) == CANTIDAD_MEDICIONES_VALIDAS
+                    ):
                         moda_ancho = mode(list_ancho)
                         moda_largo = mode(list_largo)
                         moda_alto = mode(list_alto)
                         volumen = moda_ancho * moda_largo * moda_alto
-                        print("\nMedidas registradas\n")
+
+                        registro.guardar(
+                            frame_cam_0=frame_0,
+                            frame_cam_1=frame_1,
+                            largo=moda_largo,
+                            alto=moda_alto,
+                            ancho=moda_ancho,
+                            volumen=volumen,
+                        )
+
+                        # Mostrar medidas almacenadas
+                        print("\nMedidas registradas")
                         print("----------")
                         print(f"ancho: {moda_ancho} mm")
                         print(f"largo: {moda_largo} mm")
                         print(f"alto: {moda_alto} mm")
                         print(f"volumen: {volumen} mm3")
                         print("**********")
-                        print(f"ancho: {moda_ancho/10:.2f} cm")
-                        print(f"largo: {moda_largo/10:.2f} cm")
-                        print(f"alto: {moda_alto/10:.2f} cm")
-                        print(f"volumen: {volumen/1000} cm3")
+                        print(f"ancho: {moda_ancho / 10:.2f} cm")
+                        print(f"largo: {moda_largo / 10:.2f} cm")
+                        print(f"alto: {moda_alto / 10:.2f} cm")
+                        print(f"volumen: {volumen / 1000} cm3")
                         print("----------")
-
                         print("<<<<<<<Ya puede retirar el objeto>>>>>>>\n")
                         medicion_realizada = True
 
-                elif (ancho <= 25 and largo <= 175 and alto <= 25) and medicion_realizada:
+                elif ancho <= 25 and largo <= 175 and alto <= 25:
                     if medicion_realizada:
                         print("...Esperando un objeto para medir...")
 
@@ -161,7 +180,6 @@ try:
                     list_alto.clear()
 
                     medicion_realizada = False
-
 
         # Mostrar imagen de camaras
         if MOSTRAR_FRAME:
