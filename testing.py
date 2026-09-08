@@ -2,6 +2,9 @@ import time
 from statistics import mode
 
 import cv2
+import mediapipe as mp
+from mediapipe.tasks import python
+from mediapipe.tasks.python import vision
 
 import config
 from classes.camera_thread import CameraThread
@@ -15,7 +18,23 @@ MOSTRAR_FRAME = True
 
 DIBUJAR_ARUCOS = True
 
-CANTIDAD_MEDICIONES_VALIDAS = 50
+CANTIDAD_MEDICIONES_VALIDAS = 30
+
+# Configuración mediapipe detección manos
+MODEL_PATH = "hand_landmarker.task"
+
+base_options = python.BaseOptions(model_asset_path=MODEL_PATH)
+
+options = vision.HandLandmarkerOptions(
+    base_options=base_options,
+    running_mode=vision.RunningMode.IMAGE,
+    num_hands=2,
+    min_hand_detection_confidence=0.4,
+    min_hand_presence_confidence=0.4,
+    min_tracking_confidence=0.4,
+)
+
+detector_hands = vision.HandLandmarker.create_from_options(options)
 
 # Cargar arucos medidos
 arucos_alto = config.arucos_alto
@@ -115,8 +134,16 @@ try:
                     ]
                 )
 
-                # Registrar medidas en lista si volumen > 50000
-                if (ancho > 25 and largo > 175 and alto > 25) and not medicion_realizada:
+                # Verificar si hay manos en la imagen
+                mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=frame_0)
+                result = detector_hands.detect(mp_image)
+
+                # Registrar medidas en lista si no está a la vista el aruco id 0 y el 300 y no hay manos
+                if (
+                    (0 not in ids_detectados and 300 not in ids_detectados and 20 not in ids_detectados and 320 not in ids_detectados)
+                    and not medicion_realizada
+                    and not result.hand_landmarks
+                ):
                     list_ancho.append(ancho)
                     list_ancho = list_ancho[-CANTIDAD_MEDICIONES_VALIDAS:]
                     list_largo.append(largo)
@@ -135,7 +162,7 @@ try:
                     print(f"alto: {alto / 10:.2f} cm")
                     print("----------")
 
-                    # Guardar medidas si ya hay 10 registros
+                    # Guardar medidas si ya hay x registros validos
                     if (
                         len(list_ancho) == CANTIDAD_MEDICIONES_VALIDAS
                         and len(list_largo) == CANTIDAD_MEDICIONES_VALIDAS
@@ -171,15 +198,23 @@ try:
                         print("<<<<<<<Ya puede retirar el objeto>>>>>>>\n")
                         medicion_realizada = True
 
-                elif ancho <= 25 and largo <= 175 and alto <= 25:
+                elif 0 in ids_detectados or 300 in ids_detectados or 20 in ids_detectados or 320 in ids_detectados:
                     if medicion_realizada:
                         print("...Esperando un objeto para medir...")
 
+                    if len(list_ancho) or len(list_largo) or len(list_alto):
+                        print("listas de medición reiniciadas arucos iniciales detectados")
                     list_ancho.clear()
                     list_largo.clear()
                     list_alto.clear()
 
                     medicion_realizada = False
+
+                elif result.hand_landmarks:
+                    list_ancho.clear()
+                    list_largo.clear()
+                    list_alto.clear()
+                    print("listas de medición reiniciadas manos detectadas")
 
         # Mostrar imagen de camaras
         if MOSTRAR_FRAME:
