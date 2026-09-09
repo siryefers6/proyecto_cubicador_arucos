@@ -1,14 +1,19 @@
 import time
 from statistics import mode
+from sqlmodel import Session
+
+from app.database import engine
+from app.models import Pedido
+from app.services.pedidos import crear_pedido
 
 import cv2
 import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
+from app.services.imagenes import guardar_imagen_medidas, guardar_imagen_respaldo
 
 import config
 from classes.camera_thread import CameraThread
-from classes.registro_medicion import RegistroMedicion
 from utils.functions import calcular_distancia_grupo_arucos
 
 # Configuración
@@ -40,9 +45,6 @@ detector_hands = vision.HandLandmarker.create_from_options(options)
 arucos_alto = config.arucos_alto
 arucos_largo = config.arucos_largo
 arucos_ancho = config.arucos_ancho
-
-# Crear una instancia para registro
-registro = RegistroMedicion()
 
 # Detector ArUco
 dictionary = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_1000)
@@ -173,14 +175,26 @@ try:
                         moda_alto = mode(list_alto)
                         volumen = moda_ancho * moda_largo * moda_alto
 
-                        registro.guardar(
-                            frame_cam_0=frame_0,
-                            frame_cam_1=frame_1,
-                            largo=moda_largo,
-                            alto=moda_alto,
-                            ancho=moda_ancho,
-                            volumen=volumen,
+                        # Guarda la información en la base de datos
+                        pedido = Pedido(
+                            num_pedido="PED-001", # falta implementación
+                            cantidad_bultos=1, # falta implementación
+                            num_bulto=1, # falta implementación
+                            ancho_mm=moda_ancho,
+                            largo_mm=moda_largo,
+                            alto_mm=moda_alto,
+                            volumen_mm=volumen,
+                            peso=1, # falta implementación
+                            valor_volumetrico=111, # falta implementación
                         )
+
+                        ruta_imagen_medidas = guardar_imagen_medidas(imagen_unida, "PED-001")
+                        pedido.imagen_medidas = ruta_imagen_medidas
+                        ruta_imagen_respaldo = guardar_imagen_respaldo(imagen_unida, "PED-001")
+                        pedido.imagen_respaldo = ruta_imagen_respaldo
+
+                        with Session(engine) as session:
+                            crear_pedido(session, pedido)
 
                         # Mostrar medidas almacenadas
                         print("\nMedidas registradas")
@@ -197,6 +211,8 @@ try:
                         print("----------")
                         print("<<<<<<<Ya puede retirar el objeto>>>>>>>\n")
                         medicion_realizada = True
+
+                        
 
                 elif 0 in ids_detectados or 300 in ids_detectados or 20 in ids_detectados or 320 in ids_detectados:
                     if medicion_realizada:
