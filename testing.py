@@ -1,18 +1,17 @@
 import time
 from statistics import mode
-from sqlmodel import Session
-
-from app.database import engine
-from app.models import Pedido
-from app.services.pedidos import crear_pedido
 
 import cv2
 import mediapipe as mp
 from mediapipe.tasks import python
 from mediapipe.tasks.python import vision
-from app.services.imagenes import guardar_imagen_medidas, guardar_imagen_respaldo
+from sqlmodel import Session
 
 import config
+from app.database import engine
+from app.models import Pedido
+from app.services.imagenes import guardar_imagen_medidas, guardar_imagen_respaldo
+from app.services.pedidos import crear_pedido
 from classes.camera_thread import CameraThread
 from utils.functions import calcular_distancia_grupo_arucos
 
