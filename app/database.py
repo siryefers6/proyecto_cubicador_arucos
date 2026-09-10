@@ -1,5 +1,5 @@
-from sqlmodel import Session, SQLModel, create_engine
 from sqlalchemy import event
+from sqlmodel import Session, SQLModel, create_engine
 
 sqlite_url = "sqlite:///data/cubicador.db"
 
