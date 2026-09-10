@@ -1,4 +1,5 @@
 from sqlmodel import Session, SQLModel, create_engine
+from sqlalchemy import event
 
 sqlite_url = "sqlite:///data/cubicador.db"
 
@@ -8,6 +9,15 @@ engine = create_engine(
     sqlite_url,
     connect_args=connect_args,
 )
+
+@event.listens_for(engine, "connect")
+def configurar_sqlite(dbapi_connection, connection_record):
+    cursor = dbapi_connection.cursor()
+
+    cursor.execute("PAGMA journal_mode=WAL")
+    cursor.execute("PAGMA synchronous=NORMAL")
+
+    cursor.close()
 
 
 def create_db_and_tables():
