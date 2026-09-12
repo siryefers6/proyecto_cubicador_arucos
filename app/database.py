@@ -14,8 +14,8 @@ engine = create_engine(
 def configurar_sqlite(dbapi_connection, connection_record):
     cursor = dbapi_connection.cursor()
 
-    cursor.execute("PAGMA journal_mode=WAL")
-    cursor.execute("PAGMA synchronous=NORMAL")
+    cursor.execute("PRAGMA journal_mode=WAL")
+    cursor.execute("PRAGMA synchronous=NORMAL")
 
     cursor.close()
 
