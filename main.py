@@ -151,7 +151,7 @@ try:
 
                         # Guarda la información en la base de datos
                         pedido = Pedido(
-                            num_pedido=str(num_pedido), # falta implementación
+                            num_pedido=num_pedido, # falta implementación
                             cantidad_bultos=1, # falta implementación
                             num_bulto=1, # falta implementación
                             ancho_mm=moda_ancho,
