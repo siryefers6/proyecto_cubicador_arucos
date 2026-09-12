@@ -144,19 +144,19 @@ try:
                         and len(list_largo) == CANTIDAD_MEDICIONES_VALIDAS
                         and len(list_alto) == CANTIDAD_MEDICIONES_VALIDAS
                     ):
-                        moda_ancho = min(list_ancho)
-                        moda_largo = min(list_largo)
-                        moda_alto = min(list_alto)
-                        volumen = moda_ancho * moda_largo * moda_alto
+                        min_ancho = min(list_ancho)
+                        min_largo = min(list_largo)
+                        min_alto = min(list_alto)
+                        volumen = min_ancho * min_largo * min_alto
 
                         # Guarda la información en la base de datos
                         pedido = Pedido(
                             num_pedido=num_pedido, # falta implementación
                             cantidad_bultos=1, # falta implementación
                             num_bulto=1, # falta implementación
-                            ancho_mm=moda_ancho,
-                            largo_mm=moda_largo,
-                            alto_mm=moda_alto,
+                            ancho_mm=min_ancho,
+                            largo_mm=min_largo,
+                            alto_mm=min_alto,
                             volumen_mm=volumen,
                             peso=1, # falta implementación
                             valor_volumetrico=111, # falta implementación
@@ -173,14 +173,14 @@ try:
                         # Mostrar medidas almacenadas
                         print("\nMedidas registradas")
                         print("----------")
-                        print(f"ancho: {moda_ancho} mm")
-                        print(f"largo: {moda_largo} mm")
-                        print(f"alto: {moda_alto} mm")
+                        print(f"ancho: {min_ancho} mm")
+                        print(f"largo: {min_largo} mm")
+                        print(f"alto: {min_alto} mm")
                         print(f"volumen: {volumen} mm3")
                         print("**********")
-                        print(f"ancho: {moda_ancho / 10:.2f} cm")
-                        print(f"largo: {moda_largo / 10:.2f} cm")
-                        print(f"alto: {moda_alto / 10:.2f} cm")
+                        print(f"ancho: {min_ancho / 10:.2f} cm")
+                        print(f"largo: {min_largo / 10:.2f} cm")
+                        print(f"alto: {min_alto / 10:.2f} cm")
                         print(f"volumen: {volumen / 1000} cm3")
                         print("----------")
                         print("<<<<<<<Ya puede retirar el objeto>>>>>>>\n")
