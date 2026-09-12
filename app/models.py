@@ -3,7 +3,7 @@ from sqlmodel import Field, SQLModel
 
 
 class PedidoBase(SQLModel):
-    num_pedido: str
+    num_pedido: int
     cantidad_bultos: int
     num_bulto: int
 
@@ -12,7 +12,7 @@ class PedidoBase(SQLModel):
     alto_mm: float
     volumen_mm: float
     peso: float
-    valor_volumetrico: float
+    valor_volumetrico: int
 
 
 class Pedido(PedidoBase, table=True):
