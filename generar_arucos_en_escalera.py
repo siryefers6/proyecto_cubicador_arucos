@@ -248,4 +248,5 @@ python3 generar_arucos_en_escalera.py 5 20 15 50 50 0 99
 python3 generar_arucos_en_escalera.py 5 20 15 50 50 100 199
 python3 generar_arucos_en_escalera.py 5 20 15 50 50 200 299
 python3 generar_arucos_en_escalera.py 5 20 15 50 50 300 399
+python3 generar_arucos_en_escalera.py 6 50 15 50 40 600 899
 """
