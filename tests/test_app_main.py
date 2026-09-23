@@ -72,7 +72,7 @@ def test_crear_pedido_incompleto(client: TestClient):
     response = client.post(
         "/pedidos",
         json={
-            "num_pedido": "PED-001",
+            "num_pedido": 3245454,
         },
     )
 
@@ -81,7 +81,7 @@ def test_crear_pedido_incompleto(client: TestClient):
 
 def test_obtener_pedidos(session: Session, client: TestClient):
     pedido_1 = Pedido(
-        num_pedido="PED-001",
+        num_pedido=3245454,
         cantidad_bultos=2,
         num_bulto=1,
         ancho_mm=300,
@@ -125,7 +125,7 @@ def test_obtener_pedidos(session: Session, client: TestClient):
 
 def test_obtener_pedido(session: Session, client: TestClient):
     pedido = Pedido(
-        num_pedido="PED-001",
+        num_pedido=3245454,
         cantidad_bultos=2,
         num_bulto=1,
         ancho_mm=300,
@@ -144,7 +144,7 @@ def test_obtener_pedido(session: Session, client: TestClient):
 
     assert response.status_code == 200
     assert data["id"] == pedido.id
-    assert data["num_pedido"] == "PED-001"
+    assert data["num_pedido"] == 3245454
     assert data["ancho_mm"] == 300
     assert data["largo_mm"] == 500
     assert data["peso"] == 15.5
@@ -158,7 +158,7 @@ def test_obtener_pedido_no_existente(client: TestClient):
 
 def test_eliminar_pedido(session: Session, client: TestClient):
     pedido = Pedido(
-        num_pedido="PED-001",
+        num_pedido=3245454,
         cantidad_bultos=1,
         num_bulto=1,
         ancho_mm=300,
