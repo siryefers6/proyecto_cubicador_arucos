@@ -40,7 +40,7 @@ def test_crear_pedido(client: TestClient):
     response = client.post(
         "/pedidos",
         json={
-            "num_pedido": "PED-001",
+            "num_pedido": 3245454,
             "cantidad_bultos": 2,
             "num_bulto": 1,
             "ancho_mm": 300,
@@ -55,7 +55,7 @@ def test_crear_pedido(client: TestClient):
     data = response.json()
 
     assert response.status_code == 200
-    assert data["num_pedido"] == "PED-001"
+    assert data["num_pedido"] == 3245454
     assert data["cantidad_bultos"] == 2
     assert data["num_bulto"] == 1
     assert data["ancho_mm"] == 300
