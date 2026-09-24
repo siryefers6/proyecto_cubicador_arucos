@@ -93,7 +93,7 @@ def test_obtener_pedidos(session: Session, client: TestClient):
     )
 
     pedido_2 = Pedido(
-        num_pedido="PED-002",
+        num_pedido=3245455,
         cantidad_bultos=1,
         num_bulto=1,
         ancho_mm=400,
