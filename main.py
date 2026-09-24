@@ -97,7 +97,6 @@ try:
                             arucos_ancho[1].medir(ids_detectados),
                             arucos_ancho[2].medir(ids_detectados),
                             arucos_ancho[3].medir(ids_detectados),
-                            arucos_ancho[4].medir(ids_detectados),
                         ]
                     )
                     largo = calcular_distancia_grupo_arucos(
@@ -106,7 +105,6 @@ try:
                             arucos_largo[1].medir(ids_detectados),
                             arucos_largo[2].medir(ids_detectados),
                             arucos_largo[3].medir(ids_detectados),
-                            arucos_largo[4].medir(ids_detectados),
                         ]
                     )
                     alto = calcular_distancia_grupo_arucos(
@@ -115,7 +113,6 @@ try:
                             arucos_alto[1].medir(ids_detectados),
                             arucos_alto[2].medir(ids_detectados),
                             arucos_alto[3].medir(ids_detectados),
-                            arucos_alto[4].medir(ids_detectados),
                         ]
                     )
 
