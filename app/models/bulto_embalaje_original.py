@@ -2,7 +2,7 @@ from sqlalchemy import BigInteger, Column, Computed
 from sqlmodel import Field, SQLModel
 
 
-class BultoProductoBase(SQLModel):
+class BultoEmbalajeOriginalBase(SQLModel):
     codigo: str = Field(unique=True, index=True)
     descripcion: str
 
@@ -16,7 +16,7 @@ class BultoProductoBase(SQLModel):
     )
 
 
-class BultoProducto(BultoProductoBase, table=True):
+class BultoEmbalajeOriginal(BultoEmbalajeOriginalBase, table=True):
     id: int | None = Field(
         default=None,
         primary_key=True,
@@ -34,11 +34,11 @@ class BultoProducto(BultoProductoBase, table=True):
     )
 
 
-class BultoProductoCreate(BultoProductoBase):
+class BultoEmbalajeOriginalCreate(BultoEmbalajeOriginalBase):
     pass
 
 
-class BultoProductoUpdate(SQLModel):
+class BultoEmbalajeOriginalUpdate(SQLModel):
     codigo: str | None = None
     descripcion: str | None = None
 
@@ -63,6 +63,6 @@ class BultoProductoUpdate(SQLModel):
     )
 
 
-class BultoProductoRead(BultoProductoBase):
+class BultoEmbalajeOriginalRead(BultoEmbalajeOriginalBase):
     id: int
     volumen_mm3: int
