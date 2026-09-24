@@ -98,8 +98,8 @@ if cantidad_ids != cantidad_arucos:
 # CONFIGURACIÓN
 # ============================================================
 
-TAMANO_ARUCO = 201
-MARGEN = 30
+TAMANO_ARUCO = 150
+MARGEN = 0
 
 dictionary = cv2.aruco.getPredefinedDictionary(
     cv2.aruco.DICT_4X4_1000
@@ -249,4 +249,5 @@ python3 generar_arucos_en_escalera.py 5 20 15 50 50 100 199
 python3 generar_arucos_en_escalera.py 5 20 15 50 50 200 299
 python3 generar_arucos_en_escalera.py 5 20 15 50 50 300 399
 python3 generar_arucos_en_escalera.py 6 50 15 50 40 600 899
+python3 generar_arucos_en_escalera.py 4 50 20 50 50 0 199 -> en uso
 """
