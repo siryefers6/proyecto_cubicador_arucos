@@ -6,9 +6,9 @@ from sqlmodel import Session
 
 import config
 from app.database import engine
-from app.models import Pedido
+from app.models.pedido import Pedido
 from app.services.imagenes import guardar_imagen_medidas, guardar_imagen_respaldo
-from app.services.pedidos import crear_pedido
+from app.services.pedido import crear_pedido
 from classes.camera_thread import CameraThread
 from utils.functions import calcular_distancia_grupo_arucos
 
@@ -65,7 +65,6 @@ try:
         time.sleep(1)
 
         while True:
-
             frame_count += 1
             frame_0 = camera_0.read()
             frame_1 = camera_1.read()
@@ -151,20 +150,24 @@ try:
 
                         # Guarda la información en la base de datos
                         pedido = Pedido(
-                            num_pedido=num_pedido, # falta implementación
-                            cantidad_bultos=1, # falta implementación
-                            num_bulto=1, # falta implementación
+                            num_pedido=num_pedido,  # falta implementación
+                            cantidad_bultos=1,  # falta implementación
+                            num_bulto=1,  # falta implementación
                             ancho_mm=min_ancho,
                             largo_mm=min_largo,
                             alto_mm=min_alto,
                             volumen_mm=volumen,
-                            peso=1, # falta implementación
-                            valor_volumetrico=111, # falta implementación
+                            peso=1,  # falta implementación
+                            valor_volumetrico=111,  # falta implementación
                         )
 
-                        ruta_imagen_medidas = guardar_imagen_medidas(imagen_unida, num_pedido)
+                        ruta_imagen_medidas = guardar_imagen_medidas(
+                            imagen_unida, num_pedido
+                        )
                         pedido.imagen_medidas = ruta_imagen_medidas
-                        ruta_imagen_respaldo = guardar_imagen_respaldo(imagen_unida, num_pedido)
+                        ruta_imagen_respaldo = guardar_imagen_respaldo(
+                            imagen_unida, num_pedido
+                        )
                         pedido.imagen_respaldo = ruta_imagen_respaldo
 
                         with Session(engine) as session:
@@ -191,7 +194,6 @@ try:
 
                         cv2.destroyAllWindows()
                         break
-                            
 
             # Mostrar imagen de camaras
             if MOSTRAR_FRAME:

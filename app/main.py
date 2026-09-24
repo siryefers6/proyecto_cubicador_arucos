@@ -5,14 +5,13 @@ from fastapi import Depends, FastAPI, HTTPException, Query
 from sqlmodel import Session
 
 from app.database import create_db_and_tables, get_session
-from app.models import Pedido, PedidoCreate, PedidoPublic
-from app.services.pedidos import (
+from app.models.pedido import Pedido, PedidoCreate, PedidoPublic
+from app.services.pedido import (
     crear_pedido,
     eliminar_pedido,
     obtener_pedido,
     obtener_pedidos,
 )
-
 
 SessionDep = Annotated[Session, Depends(get_session)]
 

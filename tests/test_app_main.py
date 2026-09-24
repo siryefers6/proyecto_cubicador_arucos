@@ -5,7 +5,7 @@ from sqlmodel.pool import StaticPool
 
 from app.database import get_session
 from app.main import app
-from app.models import Pedido
+from app.models.pedido import Pedido
 
 
 @pytest.fixture(name="session")

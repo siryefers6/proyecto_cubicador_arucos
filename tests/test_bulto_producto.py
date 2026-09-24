@@ -2,7 +2,7 @@ import pytest
 from sqlmodel import Session, SQLModel, create_engine
 from sqlmodel.pool import StaticPool
 
-from app.models import BultoProductoCreate
+from app.models.bulto_producto import BultoProductoCreate
 from app.services.bulto_producto import crear_bulto_producto, obtener_bulto_producto
 
 

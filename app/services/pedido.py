@@ -1,6 +1,6 @@
 from sqlmodel import Session, select
 
-from app.models import Pedido
+from app.models.pedido import Pedido
 
 
 def crear_pedido(
@@ -29,11 +29,7 @@ def obtener_pedidos(
     limit: int = 100,
 ) -> list[Pedido]:
 
-    return session.exec(
-        select(Pedido)
-        .offset(offset)
-        .limit(limit)
-    ).all()
+    return session.exec(select(Pedido).offset(offset).limit(limit)).all()
 
 
 def eliminar_pedido(
